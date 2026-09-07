@@ -1,0 +1,23 @@
+<view class="page">
+  <view class="card register-card">
+    <view class="title">员工注册</view>
+    <view class="muted intro">提交后需管理员审核，通过后方可查询内部资料。</view>
+    <view class="label">姓名（选填）</view>
+    <input class="field" maxlength="30" value="{{name}}" placeholder="请输入姓名（选填）" bindinput="onName" />
+    <block wx:if="{{!reviewerMode}}">
+      <view class="label">员工编号 *</view>
+      <input class="field" maxlength="4" value="{{employeeCode}}" placeholder="请输入员工编号，例如 001" bindinput="onEmployeeCode" />
+      <view class="field-help">员工编号为 3 位数字，例如 001、002、003</view>
+    </block>
+    <view wx:if="{{reviewModeEnabled}}" class="review-entry">
+      <view class="review-switch-row"><view><view class="review-title">微信审核通道</view><view class="muted review-help">仅供微信审核人员使用</view></view><switch checked="{{reviewerMode}}" bindchange="toggleReviewerMode" color="#07c160"/></view>
+      <block wx:if="{{reviewerMode}}">
+        <view class="muted review-help">无需员工编号和人工审批；通过后仍需确认保密声明。</view>
+        <input class="field review-code" password maxlength="64" value="{{reviewInviteCode}}" placeholder="请输入审核邀请码" bindinput="onReviewInvite" />
+      </block>
+    </view>
+    <button wx:if="{{!reviewerMode}}" class="btn" disabled="{{submitting}}" bindtap="submit">{{submitting ? '正在提交…' : '提交注册'}}</button>
+    <button wx:else class="btn" disabled="{{submitting}}" bindtap="submit">{{submitting ? '正在验证…' : '进入审核'}}</button>
+  </view>
+  <view class="site-footer">智慧查询，版权所有</view>
+</view>

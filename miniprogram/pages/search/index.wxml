@@ -1,0 +1,26 @@
+<view class="page">
+  <view class="top row"><view><view class="title">型号 / 测试编码查询</view><view class="muted">仅限内部授权使用 · 操作留痕</view></view><button class="mine" bindtap="profile">我的</button></view>
+  <view class="card"><view class="search-row"><input class="search" value="{{keyword}}" confirm-type="search" placeholder="输入总成编号或手机型号" bindinput="input" bindconfirm="search"/><button class="search-btn" bindtap="search">查询</button></view></view>
+  <view wx:if="{{searched && !records.length}}" class="empty">暂未查询到对应型号，请检查输入内容或联系管理员。</view>
+  <view wx:if="{{truncated}}" class="card muted">匹配结果较多，当前显示前 100 条，请输入更完整的关键词。</view>
+  <view wx:for="{{records}}" wx:for-item="item" wx:for-index="recordIndex" wx:key="_id" class="card result">
+    <view wx:if="{{item.matchType==='assembly_exact'}}" class="exact-badge">总成编号精确匹配</view>
+    <view class="label">测试编码</view>
+    <view class="row code-row"><text class="test-code {{!item.testCode ? 'no-code' : ''}}" selectable>{{item.testCode || '暂无测试编码'}}</text><button wx:if="{{item.testCode}}" class="btn btn-small" data-id="{{item._id}}" data-value="{{item.testCode}}" data-field="testCode" bindtap="copy">一键复制</button></view>
+    <view class="divider"></view><view class="label">通用型号 / 商品名称</view>
+    <view class="row"><text class="product" selectable>{{item.productName || '暂无商品名称'}}</text></view>
+    <view class="result-bottom">
+      <view class="assembly"><text class="assembly-label">总成编号：</text><text class="assembly-code">{{item.assemblyCode}}</text></view>
+      <button wx:if="{{item.productName}}" class="btn btn-small btn-secondary product-copy" data-id="{{item._id}}" data-value="{{item.productName}}" data-field="productName" bindtap="copy">一键复制</button>
+    </view>
+    <view class="divider"></view>
+    <view class="image-section-title">产品图片</view>
+    <view class="product-image-grid">
+      <view wx:for="{{item.imageSlots}}" wx:for-item="imageSlot" wx:key="slot" class="product-image-slot">
+        <image wx:if="{{imageSlot.url && !imageSlot.loadFailed}}" class="product-image" src="{{imageSlot.url}}" mode="aspectFill" data-record-index="{{recordIndex}}" data-slot="{{imageSlot.slot}}" data-url="{{imageSlot.url}}" bindtap="previewImage" binderror="imageError"/>
+        <view wx:else class="product-image-placeholder">{{imageSlot.loadFailed ? '图片暂不可用' : '暂无图片'}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="site-footer">智慧查询，版权所有</view>
+</view>

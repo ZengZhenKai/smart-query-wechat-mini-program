@@ -1,0 +1,16 @@
+<view class="page">
+  <view class="card profile-card">
+    <view class="profile-head">
+      <button class="avatar-button" open-type="chooseAvatar" bindchooseavatar="chooseAvatar">
+        <image wx:if="{{form.avatarUrl}}" class="avatar" src="{{form.avatarUrl}}" mode="aspectFill"/>
+        <view wx:else class="avatar-placeholder"><text class="avatar-plus">＋</text><text>头像</text></view>
+      </button>
+      <view class="info"><view class="profile-name">{{form.name || '未填写'}}</view><view class="muted">{{user.employeeCode || '无员工编号'}} · {{roleText}}</view></view>
+    </view>
+    <view class="label edit-label">姓名（选填）</view>
+    <input class="field" maxlength="30" value="{{form.name}}" placeholder="未填写" bindinput="name"/>
+    <button class="btn" bindtap="save">保存资料</button>
+  </view>
+  <view class="card"><view class="list-item" bindtap="confidentiality">保密规定</view><view wx:if="{{canMaintainModels}}" class="list-item" bindtap="models">型号业务维护</view><view wx:if="{{isAdmin}}" class="list-item" bindtap="admin">管理后台</view></view>
+  <view class="site-footer">智慧查询，版权所有</view>
+</view>

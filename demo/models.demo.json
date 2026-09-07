@@ -1,0 +1,23 @@
+[
+  {
+    "assemblyCode": "E001",
+    "productName": "Demo 型号 A",
+    "testCode": "TEST-001",
+    "images": [],
+    "_demo": true
+  },
+  {
+    "assemblyCode": "E002",
+    "productName": "Demo 型号 B",
+    "testCode": "TEST-002",
+    "images": [],
+    "_demo": true
+  },
+  {
+    "assemblyCode": "E003",
+    "productName": "Demo 型号 C",
+    "testCode": "TEST-003",
+    "images": [],
+    "_demo": true
+  }
+]

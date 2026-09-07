@@ -1,0 +1,10 @@
+<view class="page"><view class="card notice">
+  <view class="title danger">【公司内部资料保密提醒】</view>
+  <view>本小程序仅限公司内部授权人员使用。</view>
+  <view>小程序内涉及的型号、测试编码、产品信息及其他相关资料均属于公司内部资料，受相关法律法规及公司管理制度保护。</view>
+  <view class="danger">公司内部资料不得以任何形式外发。</view>
+  <view>严禁以截图、复制后外发、转发、拍照、导出、上传网络或其他任何形式向公司外部传播。未经授权，不得将小程序内任何资料提供给第三方。</view>
+  <view>本小程序将记录账号登录、查询、复制、数据新增、修改、删除、账号审核及权限变更等操作记录。</view>
+  <view>如发现违规使用或资料外泄，公司可根据相关操作记录进行追溯，并依法依规处理。</view>
+  <button wx:if="{{needAccept}}" class="btn" bindtap="accept">我已阅读并知悉</button>
+</view><view class="site-footer">智慧查询，版权所有</view></view>

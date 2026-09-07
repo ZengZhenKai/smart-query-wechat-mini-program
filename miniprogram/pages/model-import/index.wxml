@@ -1,0 +1,70 @@
+<view class="page">
+  <view class="card warning"><view class="title">Excel批量导入</view><view>仅管理员使用。文件将在可信云函数中解析，确认或取消后会删除临时文件。</view><view class="danger-text">Excel 中不存在的原有型号不会自动删除。</view></view>
+  <view class="card">
+    <button class="btn btn-secondary" disabled="{{busy}}" bindtap="chooseFile">选择 XLSX 文件</button>
+    <view wx:if="{{fileName}}" class="file-name">{{fileName}}</view>
+    <button wx:if="{{fileName && !preview}}" class="btn" disabled="{{busy}}" bindtap="parseFile">{{busy ? '正在上传解析…' : '解析并检查'}}</button>
+  </view>
+
+  <view wx:if="{{preview}}" class="card">
+    <view class="title">导入预览</view>
+    <view class="stat"><text>文件名</text><text>{{preview.fileName}}</text></view>
+    <view class="stat"><text>工作表</text><text>{{preview.sheetName}}</text></view>
+    <view class="stat"><text>Excel 数据总行数</text><text>{{preview.totalRows}}</text></view>
+    <view class="stat"><text>有效型号</text><text>{{preview.validModels}}</text></view>
+
+    <view class="stat detail-link good" data-kind="create" bindtap="toggleDetails"><text>新增 {{preview.createCount}} 条</text><text>{{showCreate ? '收起 ▲' : '查看 ▼'}}</text></view>
+    <view wx:if="{{showCreate}}" class="details-panel">
+      <view wx:if="{{!preview.createCount}}" class="empty-detail">没有新增型号</view>
+      <view wx:for="{{visibleCreates}}" wx:key="assemblyCode" wx:for-item="createItem" class="detail-item">
+        <view class="detail-code">{{createItem.assemblyCode}}</view>
+        <view>商品名称：{{createItem.productNameDisplay}}</view>
+        <view class="value-line">测试编码：{{createItem.testCodeDisplay}}</view>
+      </view>
+      <button wx:if="{{createLimit < preview.createCount}}" class="more-btn" data-kind="create" bindtap="showMore">查看更多（已显示 {{visibleCreates.length}} / {{preview.createCount}}）</button>
+    </view>
+
+    <view class="stat detail-link changed" data-kind="update" bindtap="toggleDetails"><text>更新 {{preview.updateCount}} 条</text><text>{{showUpdate ? '收起 ▲' : '查看 ▼'}}</text></view>
+    <view wx:if="{{showUpdate}}" class="details-panel update-panel">
+      <view wx:if="{{!preview.updateCount}}" class="empty-detail">没有需要更新的型号</view>
+      <view wx:for="{{visibleUpdates}}" wx:key="assemblyCode" wx:for-item="updateItem" class="detail-item">
+        <view class="detail-code">{{updateItem.assemblyCode}}</view>
+        <view wx:for="{{updateItem.changes}}" wx:key="field" wx:for-item="fieldChange" class="change-line">
+          <text class="field-label">{{fieldChange.label}}：</text><text class="old-value">{{fieldChange.oldDisplay}}</text><text class="arrow"> → </text><text class="new-value">{{fieldChange.newDisplay}}</text>
+        </view>
+        <view wx:if="{{updateItem.preservedBlankText}}" class="blank-protected">Excel 中 {{updateItem.preservedBlankText}} 为空，已保留数据库原值（不会清空）</view>
+      </view>
+      <button wx:if="{{updateLimit < preview.updateCount}}" class="more-btn" data-kind="update" bindtap="showMore">查看更多（已显示 {{visibleUpdates.length}} / {{preview.updateCount}}）</button>
+    </view>
+
+    <view class="stat detail-link" data-kind="unchanged" bindtap="toggleDetails"><text>无变化 {{preview.unchangedCount}} 条</text><text>{{showUnchanged ? '收起 ▲' : '查看 ▼'}}</text></view>
+    <view wx:if="{{showUnchanged}}" class="details-panel">
+      <view wx:if="{{!preview.unchangedCount}}" class="empty-detail">没有无变化型号</view>
+      <view wx:for="{{visibleUnchanged}}" wx:key="assemblyCode" wx:for-item="unchangedItem" class="detail-item compact-item">
+        <view class="detail-code">{{unchangedItem.assemblyCode}}</view><view>{{unchangedItem.productNameDisplay}}</view>
+        <view wx:if="{{unchangedItem.preservedBlankText}}" class="blank-protected">Excel 中 {{unchangedItem.preservedBlankText}} 为空，已保留数据库原值（不会清空）</view>
+      </view>
+      <button wx:if="{{unchangedLimit < preview.unchangedCount}}" class="more-btn" data-kind="unchanged" bindtap="showMore">查看更多（已显示 {{visibleUnchanged.length}} / {{preview.unchangedCount}}）</button>
+    </view>
+
+    <view class="stat detail-link bad" data-kind="error" bindtap="toggleDetails"><text>异常 {{preview.errorCount}} 条</text><text>{{showError ? '收起 ▲' : '查看 ▼'}}</text></view>
+    <view wx:if="{{showError}}" class="details-panel error-panel">
+      <view wx:if="{{!preview.errorCount}}" class="empty-detail">没有异常</view>
+      <view wx:for="{{visibleErrors}}" wx:key="detailKey" wx:for-item="errorItem" class="detail-item error-item">
+        <view>第 {{errorItem.row}} 行 · 总成编号：{{errorItem.assemblyCodeDisplay}}</view><view class="reason">{{errorItem.reason}}</view>
+      </view>
+      <button wx:if="{{errorLimit < preview.errorCount}}" class="more-btn" data-kind="error" bindtap="showMore">查看更多（已显示 {{visibleErrors.length}} / {{preview.errorCount}}）</button>
+    </view>
+
+    <view class="stat"><text>空商品名称（Excel 原始统计）</text><text>{{preview.blankProductNameCount}}</text></view>
+    <view class="stat"><text>空测试编码（Excel 原始统计）</text><text>{{preview.blankTestCodeCount}}</text></view>
+    <view class="stat bad"><text>重复总成编号</text><text>{{preview.duplicateAssemblyCount}}</text></view>
+    <view wx:if="{{preview.duplicateAssemblyText}}" class="error-list">重复：{{preview.duplicateAssemblyText}}</view>
+    <view class="safe-notice">空白保护：本次有 {{preview.preservedBlankValueCount}} 个 Excel 空白字段将保留数据库已有非空值，不会被清空。</view>
+    <view class="keep-notice">【确认前数据库不会修改；Excel 中不存在的原有型号不会自动删除】</view>
+    <button wx:if="{{canImport}}" class="btn" disabled="{{busy}}" bindtap="confirmImport">确认更新数据库</button>
+    <button class="btn btn-secondary" disabled="{{busy}}" bindtap="cancelImport">取消</button>
+  </view>
+  <view wx:if="{{result}}" class="card result-card"><view class="title">更新结果</view><view>新增成功：{{result.createSuccess}}</view><view>更新成功：{{result.updateSuccess}}</view><view>无变化：{{result.unchangedCount}}</view><view class="danger-text">失败：{{result.failedCount}}</view><view wx:if="{{result.failedAssemblyText}}">失败编号：{{result.failedAssemblyText}}</view><button class="btn" bindtap="finish">返回型号管理</button></view>
+  <view class="site-footer">智慧查询，版权所有</view>
+</view>

@@ -1,0 +1,1 @@
+.search-row{display:flex;align-items:center;gap:16rpx}.search-row .field{flex:1;margin:0}.name{font-size:34rpx;font-weight:700}.code{white-space:pre-wrap;background:#f2fbf5;padding:18rpx;margin-top:20rpx;border-radius:10rpx;color:#17643d}

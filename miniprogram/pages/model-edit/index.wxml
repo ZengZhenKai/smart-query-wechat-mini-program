@@ -1,0 +1,28 @@
+<view class="page"><view wx:if="{{isAdmin || canEditAssemblyCode}}" class="card">
+<view class="label">总成编号 *</view><input class="field" value="{{form.assemblyCode}}" data-key="assemblyCode" bindinput="input"/>
+<block wx:if="{{isAdmin}}">
+  <view class="label">商品名称 / 通用型号 *</view><textarea class="field area" value="{{form.productName}}" data-key="productName" bindinput="input"/>
+  <view class="label">测试编码</view><textarea class="field area large" value="{{form.testCode}}" data-key="testCode" bindinput="input" placeholder="允许多个编码、换行、括号和文字说明"/>
+  <view class="label">模组编码（不在查询前端显示）</view><textarea class="field area" value="{{form.moduleCode}}" data-key="moduleCode" bindinput="input"/>
+</block>
+<view wx:else class="muted limited-note">当前权限仅允许修改总成编号，其他型号字段保持只读。</view>
+<button class="btn" bindtap="save">{{isAdmin ? '保存型号' : '保存总成编号'}}</button></view>
+<view wx:if="{{canUploadImages}}" class="card image-manager">
+  <view class="image-manager-title">产品图片</view>
+  <view wx:if="{{savedAssemblyCode}}" class="muted image-manager-note">总成编号：{{savedAssemblyCode}} · 固定5个位置，每个位置一张</view>
+  <view wx:else class="empty image-manager-empty">请先保存型号，再进入编辑页面上传产品图片。</view>
+  <view wx:if="{{savedAssemblyCode}}" class="image-grid">
+    <view wx:for="{{imageSlots}}" wx:key="slot" class="image-admin-slot">
+      <view class="image-frame">
+        <image wx:if="{{item.url && !item.loadFailed}}" class="model-image" src="{{item.url}}" mode="aspectFill" data-url="{{item.url}}" data-slot="{{item.slot}}" bindtap="previewImage" binderror="imageError"/>
+        <view wx:else class="image-placeholder">{{item.loadFailed ? '图片暂不可用' : '暂无图片'}}</view>
+        <view class="slot-label">照片{{item.slot}}</view>
+      </view>
+      <view class="image-actions">
+        <button class="btn btn-small image-action" data-slot="{{item.slot}}" bindtap="chooseImage">{{item.fileID ? '更换' : '上传'}}</button>
+        <button wx:if="{{item.fileID}}" class="btn btn-small btn-danger image-action" data-slot="{{item.slot}}" bindtap="removeImage">删除</button>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="site-footer">智慧查询，版权所有</view></view>

@@ -1,0 +1,12 @@
+{
+  "pages": [
+    "pages/boot/index", "pages/register/index", "pages/pending/index",
+    "pages/confidentiality/index", "pages/search/index", "pages/profile/index",
+    "pages/admin/index", "pages/employees/index", "pages/models/index",
+    "pages/model-edit/index", "pages/model-import/index", "pages/admins/index", "pages/logs/index"
+  ],
+  "window": { "navigationBarTitleText": "查询编码", "navigationBarBackgroundColor": "#07C160", "navigationBarTextStyle": "white", "backgroundColor": "#F2FBF5" },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

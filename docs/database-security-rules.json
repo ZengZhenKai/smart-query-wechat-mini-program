@@ -1,0 +1,6 @@
+{
+  "users": { "read": false, "write": false },
+  "models": { "read": false, "write": false },
+  "model_images": { "read": false, "write": false },
+  "operation_logs": { "read": false, "write": false }
+}

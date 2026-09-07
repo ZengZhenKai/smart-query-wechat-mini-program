@@ -1,0 +1,4 @@
+<view class="page"><view class="card">
+  <view class="title">{{title}}</view><view class="muted">{{message}}</view>
+  <button class="btn" bindtap="refresh">刷新审核状态</button>
+</view><view class="site-footer">智慧查询，版权所有</view></view>

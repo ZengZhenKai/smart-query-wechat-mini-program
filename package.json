@@ -1,0 +1,17 @@
+{
+  "name": "query-code-miniprogram-tools",
+  "private": true,
+  "scripts": {
+    "validate": "node scripts/validate-project.js",
+    "excel:prepare": "node scripts/prepare-excel-import.js",
+    "test:data": "node scripts/test-data-query.js",
+    "test:security": "node scripts/test-security-contract.js",
+    "test:phone": "node scripts/test-phone-contract.js",
+    "test:super-admin": "node scripts/test-super-admin-bootstrap.js",
+    "test:model-import": "node scripts/test-model-import.js",
+    "test:ui": "node scripts/test-ui-contract.js",
+    "test:model-images": "node scripts/test-model-images.js",
+    "test:review-mode": "node scripts/test-review-mode.js"
+  },
+  "dependencies": { "xlsx": "^0.18.5" }
+}

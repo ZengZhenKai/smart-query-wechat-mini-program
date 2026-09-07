@@ -1,0 +1,4 @@
+{
+  "read": "auth != null",
+  "write": "auth != null && (resource.openid == auth.openid || resource.openid == auth.uid) && (((/^avatars\\//.test(resource.path) == true || /^model-images\\//.test(resource.path) == true) && resource.size <= 10485760 && (/\\.jpg$/.test(resource.path) == true || /\\.jpeg$/.test(resource.path) == true || /\\.png$/.test(resource.path) == true || /\\.webp$/.test(resource.path) == true || /\\.gif$/.test(resource.path) == true)) || (/^temp-model-imports\\//.test(resource.path) == true && /\\.xlsx$/.test(resource.path) == true && resource.size <= 15728640))"
+}
